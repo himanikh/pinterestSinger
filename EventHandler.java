@@ -92,7 +92,7 @@ public class EventHandler implements RequestHandler<ScheduledEvent, String> {
  
         ObjectListing files = s3Client.listObjects(bucketName); 
         List<KeyVersion> filesProcessed = new ArrayList<DeleteObjectsRequest.KeyVersion>(); 
- 
+        int iteration = 0;
         for (Iterator<?> iterator = files.getObjectSummaries().iterator(); iterator.hasNext(); ) { 
             S3ObjectSummary summary = (S3ObjectSummary) iterator.next(); 
             logger.log("Reading Object: " + summary.getKey()); 
@@ -108,7 +108,7 @@ public class EventHandler implements RequestHandler<ScheduledEvent, String> {
             String fileContents = s3Client.getObjectAsString(bucketName, summary.getKey()); 
  
             if (!isValidFile(fileContents)) { 
-                logger.log(String.format("Skipping invalid file %s", summary.getKey())); 
+                logger.log(String.format("Skipping invalid file %s in %s itr", summary.getKey(), iteration)); 
                 continue; 
             } 
              
